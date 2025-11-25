@@ -25,43 +25,118 @@ pip install -r requirements.txt
 ## Repository Structure
 
 ```
-Circuit_Subspace/
+Beyond-Components/
 ├── src/                          # Core source code
 │   ├── models/
-│   │   └── masked_transformer_circuit.py  # Main circuit discovery model
+│   │   └── masked_transformer_circuit.py
+│   │       # Main circuit discovery model with SVD decomposition
+│   │       # Implements learnable masks on singular value components
+│   │       # Handles QK (Query-Key) and OV (Output-Value) matrices
+│   │
 │   ├── data/
-│   │   └── data_loader.py        # Dataset loaders for IOI, GP, GT tasks
+│   │   ├── data_loader.py        # Dataset loaders for all tasks
+│   │   │   # - load_gp_dataset(): Gender Pronoun task
+│   │   │   # - load_ioi_dataset(): Indirect Object Identification
+│   │   │   # - load_gt_dataset(): Greater-Than task
+│   │   └── __init__.py
+│   │
 │   └── utils/
-│       ├── utils.py              # Utility functions
-│       └── visualization.py      # Plotting and visualization
+│       ├── utils.py              # Core utility functions
+│       │   # - Model loading and initialization
+│       │   # - Data column name helpers
+│       │   # - Seed setting for reproducibility
+│       ├── visualization.py      # Plotting and visualization
+│       │   # - visualize_masks(): Heatmap visualization
+│       │   # - plot_training_history(): Loss curves
+│       │   # - visualize_masked_singular_values()
+│       ├── constants.py          # Project-wide constants
+│       └── __init__.py
+│
 ├── experiments/
-│   ├── train.py                  # Training script
-│   ├── ablation/
-│   │   ├── intervention.py              # Activation swap interventions
-│   │   └── comprehensive_sigma_test.py  # Sigma amplification experiments
-│   └── evaluation/
-│       ├── comprehensive_metrics_table.py  # Sparsity vs accuracy evaluation
-│       └── generate_sigma_table.py         # Generate results tables
-├── configs/
-│   └── gp_config.yaml            # Configuration for GP task
-├── data/                         # Place datasets here
-├── requirements.txt
-└── README.md
+│   ├── train.py                  # Main training script
+│   │   # Trains circuit discovery model with mask learning
+│   │   # Supports W&B logging, checkpointing, visualization
+│   │   # Usage: python experiments/train.py --config configs/gp_config.yaml
+│   │
+│   ├── ablation/                 # Intervention experiments
+│   │   ├── intervention.py
+│   │   │   # Swap activations to empirically observed values
+│   │   │   # Tests discovered circuits on gender flip task
+│   │   └── comprehensive_sigma_test.py
+│   │       # Systematic sigma amplification testing
+│   │       # Tests effect of different sigma multipliers
+│   │
+│   └── evaluation/               # Metrics and analysis
+│       ├── comprehensive_metrics_table.py
+│       │   # Generate sparsity vs accuracy tables
+│       │   # Analyze trade-offs in circuit discovery
+│       └── generate_sigma_table.py
+│           # Generate results tables for interventions
+│
+├── configs/                      # YAML configuration files
+│   ├── gp_config.yaml            # Gender Pronoun task config
+│   ├── ioi_config.yaml           # Indirect Object Identification config
+│   └── gt_config.yaml            # Greater-Than task config
+│
+├── data/                         # Datasets directory
+│   ├── data_main.zip             # Complete dataset archive (48MB)
+│   │   # Contains train/val/test splits for all tasks
+│   │   # Extract: unzip data/data_main.zip -d data/
+│   └── .gitkeep
+│
+├── checkpoints/                  # Trained model checkpoints (created during training)
+│   └── .gitkeep
+│
+├── run_train.py                  # Convenience wrapper for training
+├── run_ablation.py               # Convenience wrapper for ablation experiments
+├── requirements.txt              # Python dependencies
+├── setup.py                      # Package installation script
+├── .gitignore                    # Git ignore patterns
+├── LICENSE                       # MIT License
+└── README.md                     # This file
 ```
+
+### Key Components
+
+**Core Model**: `MaskedTransformerCircuit` performs SVD decomposition on attention matrices and learns sparse masks to identify minimal circuits.
+
+**Tasks Supported**:
+- **GP (Gender Pronoun)**: Predict gender pronouns in context
+- **IOI (Indirect Object Identification)**: Identify indirect objects in sentences
+- **GT (Greater-Than)**: Compare numerical values
+
+**Experiment Pipeline**:
+1. Train circuit discovery model (`experiments/train.py`)
+2. Run interventions to test circuits (`experiments/ablation/intervention.py`)
+3. Generate evaluation metrics (`experiments/evaluation/`)
+
 
 ## Quick Start
 
 ### 1. Prepare Data
 
-Place your dataset CSV files in the `data/` directory. Expected format:
+Extract the provided dataset archive:
 
-**For Gender Pronoun (GP) task:**
-- `train_1k_gp.csv`, `val_gp.csv`, `test_gp.csv`
+```bash
+cd data/
+unzip data_main.zip
+cd ..
+```
+
+This will create a `data/data_main/` directory with all required datasets.
+
+**Dataset Structure:**
+
+**Gender Pronoun (GP) task:**
+- Files: `train_1k_gp.csv`, `val_gp.csv`, `test_gp.csv`
 - Columns: `prefix`, `pronoun`, `name`, `corr_prefix`, `corr_pronoun`, `corr_name`
 
-**For Indirect Object Identification (IOI) task:**
-- `train_1k_ioi.csv`, `val_ioi.csv`, `test_1k_ioi.csv`
+**Indirect Object Identification (IOI) task:**
+- Files: `train_1k_ioi.csv`, `train_5k_ioi.csv`, `val_ioi.csv`, `test_ioi.csv`
 - Columns: `ioi_sentences_input`, `ioi_sentences_labels`, `corr_ioi_sentences_input`, etc.
+
+**Greater-Than (GT) task:**
+- Files: `train_gt_1k.csv`, `train_gt_2k.csv`, `train_gt_3k.csv`, `val_gt.csv`, `test_gt.csv`
 
 ### 2. Train a Circuit
 
