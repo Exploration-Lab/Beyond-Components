@@ -1,0 +1,25 @@
+# Core dependencies
+torch>=2.0.0
+numpy>=1.24.0
+pandas>=2.0.0
+tqdm>=4.65.0
+pyyaml>=6.0
+
+# TransformerLens for mechanistic interpretability
+transformer-lens>=1.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# Experiment tracking (optional)
+wandb>=0.15.0
+
+# Transformers and tokenizers
+transformers>=4.30.0
+tokenizers>=0.13.0
+
+# Jupyter support (optional)
+jupyter>=1.0.0
+ipywidgets>=8.0.0

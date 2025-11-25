@@ -1,0 +1,58 @@
+# SVD-based Transformer Circuit Discovery Configuration
+# Gender Pronoun (GP) Task
+
+experiment_name: gp_circuit_discovery
+seed: 42
+use_wandb: false
+
+# Model settings
+model:
+  name: "gpt2-small"
+  pretrained_cache_dir: "cache_dir"
+
+# Data settings
+data_type: "gp"
+max_pad_length: 64
+
+# Training settings
+training:
+  batch_size: 64
+  num_epochs: 2
+  device: "cuda"
+
+  # Optimizer hyperparameters
+  learning_rate: 2.0e-2
+  weight_decay: 0.0
+  l1_weight: 1.95e-4
+  temperature: 1.0
+
+  # Learning rate scheduling
+  eval_interval: 50
+  patience: 5
+  min_lr: 1e-6
+  lr_factor: 0.5
+  early_stopping: true
+  save_checkpoints: true
+
+  # Optimal stopping criteria
+  kl_opt: 0.10
+  l1_opt: 3500
+  validation_interval: 20
+
+# SVD Masking settings
+masking:
+  mask_init_value: 0.99
+  cache_svd: true
+  warmup_steps: 0
+  max_iterations_per_batch: 15
+  sparsity_threshold: 1.0e-3
+
+# Logging settings
+log_dir: "logs"
+
+# Visualization settings
+visualization:
+  plot_interval: 100
+  log_gradients: false
+  save_visualizations: true
+  visualization_dir: "visualizations"
