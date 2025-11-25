@@ -10,6 +10,10 @@ The method decomposes each attention head's OV (Output-Value) and QK (Query-Key)
 2. **Intervening on specific directions** - Modifying activations along identified directions to control model predictions
 3. **Mathematical interpretability** - Each direction has a clear mathematical interpretation
 
+<p align="center">
+  <img src="images/intervention.png" alt="Intervention Method Illustration" width="800"/>
+</p>
+
 ## Installation
 
 **Prerequisites:**
