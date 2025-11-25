@@ -98,8 +98,6 @@ Key configuration parameters in `configs/gp_config.yaml`:
 |-----------|-------------|---------|
 | `training.learning_rate` | Mask learning rate | 2.0e-2 |
 | `training.l1_weight` | Sparsity penalty weight | 1.95e-4 |
-| `training.kl_opt` | Target KL divergence | 0.10 |
-| `training.l1_opt` | Target L1 norm | 3500 |
 | `masking.mask_init_value` | Initial mask values | 0.99 |
 | `masking.sparsity_threshold` | Threshold for "active" | 1e-3 |
 
