@@ -1,18 +1,17 @@
-# Circuit Subspace: SVD-based Transformer Circuit Discovery
+# Beyond Components: Singular Vector-Based Interpretability of Transformer Circuits
 
-This repository implements a method for discovering interpretable circuits in transformer language models using Singular Value Decomposition (SVD) and learnable masks on the singular value components.
 
-## Overview
+This repository contains the official release of the following paper:
+> **Beyond Components: Singular Vector-Based Interpretability of Transformer Circuits**<br>
+> **Paper:** https://arxiv.org/abs/2511.20273
 
-The method decomposes each attention head's OV (Output-Value) and QK (Query-Key) matrices using SVD, then learns sparse masks over the singular value directions. This enables:
+> **Authors:** Areeb Ahmad*, Abhinav Joshi*, Ashutosh Modi<br>
+>
+> **Abstract:** *Transformer-based language models exhibit complex and distributed behavior, yet their internal computations remain poorly understood. Existing mechanistic interpretability methods typically treat attention heads and multilayer perceptron layers (MLPs) (the building blocks of a transformer architecture) as indivisible units, overlooking possibilities of functional substructure learned within them. In this work, we introduce a more fine-grained perspective that decomposes these components into orthogonal singular directions, revealing superposed and independent computations within a single head or MLP. We validate our perspective on widely used standard tasks like Indirect Object Identification (IOI), Gender Pronoun (GP), and Greater Than (GT), showing that previously identified canonical functional heads, such as the “name mover,” encode multiple overlapping subfunctions aligned with distinct singular directions. Nodes in a computational graph, that are previously identified as circuit elements show strong activation along specific low-rank directions, suggesting that meaningful computations reside in compact subspaces. While some directions remain challenging to interpret fully, our results highlight that transformer computations are more distributed, structured, and compositional than previously assumed. This perspective opens new avenues for fine-grained mechanistic interpretability and a deeper understanding of model internals.*
 
-1. **Identifying minimal circuits** - Finding the smallest set of singular value directions that preserve model behavior
-2. **Intervening on specific directions** - Modifying activations along identified directions to control model predictions
-3. **Mathematical interpretability** - Each direction has a clear mathematical interpretation
+![Teaser image](images/intervention.png)
+**Picture:** *The Figure shows an illustration of the intervention process. Attention heads produce value vectors whose OV projections decompose into singular directions representing fixed logit receptors. By swapping the activation coefficients of gender-sensitive directions with opposite-gender mean values, the intervention modifies only the targeted subspaces in the residual stream, leading to predictable shifts in ‘he’/‘she’ output logits.*
 
-<p align="center">
-  <img src="images/intervention.png" alt="Intervention Method Illustration" width="800"/>
-</p>
 
 ## Installation
 
@@ -182,14 +181,20 @@ Key configuration parameters in `configs/gp_config.yaml`:
 
 ## Citation
 
-If you use this code in your research, please cite the associated paper.
+
+```
+
+@inproceedings{
+ahmad2025beyond,
+title={Beyond Components: Singular Vector-Based Interpretability of Transformer Circuits},
+author={Areeb Ahmad and Abhinav Joshi and Ashutosh Modi},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=7UbXEQNny7}
+}
+```
 
 ## License
 
 This work is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) - Creative Commons Attribution-ShareAlike 4.0 International License.
 
-## Acknowledgments
-
-This work builds on:
-- [TransformerLens](https://github.com/neelnanda-io/TransformerLens) for transformer interpretability
-- Research on mechanistic interpretability from Anthropic and others
