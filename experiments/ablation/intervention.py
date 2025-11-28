@@ -34,7 +34,7 @@ from src.utils.utils import get_data_column_names, get_indirect_objects_and_subj
 from src.models.masked_transformer_circuit import MaskedTransformerCircuit
 
 
-# Empirically measured activation ranges from deep_analysis_report.txt
+# Empirically measured activation ranges 
 DIRECTION_RANGES = {
     # Masculine directions
     'L9.H7.SV1': {
